@@ -1,0 +1,364 @@
+INFORMATIONS E-COMMERCE (Contexte pour RAG)
+============================================================
+
+Sources de données (fichiers JSON) :
+- products.json : catalogue de produits (id, nom, image, prix, rating, mots-clés)
+- deliveryOptions.json : options de livraison (id, délai, prix)
+- cart.json : contenu actuel du panier (productId, quantité, deliveryOptionId)
+- orders.json : historique de commandes (id, date, total, produits, livraison estimée)
+
+IMPORTANT :
+- Les prix sont stockés en cents (priceCents / totalCostCents) et convertis ici en dollars ($).
+- Les dates dans orders.json sont des timestamps en millisecondes depuis l'époque UNIX (UTC).
+
+1) OPTIONS DE LIVRAISON
+------------------------------------------------------------
+- Option 1: délai = 7 jour(s), coût = $0.00 (0 cents)
+- Option 2: délai = 3 jour(s), coût = $4.99 (499 cents)
+- Option 3: délai = 1 jour(s), coût = $9.99 (999 cents)
+
+2) PANIER ACTUEL (cart.json)
+------------------------------------------------------------
+- Black and Gray Athletic Cotton Socks - 6 Pairs | productId=e43638ce-6aa0-4b85-b27f-e1d07eb678c6
+  - Quantité: 2
+  - Prix unitaire: $10.90
+  - Sous-total (produit): $21.80
+  - Livraison choisie: option 1 (7 jour(s), $0.00)
+- Intermediate Size Basketball | productId=15b6fc6f-327a-4ec4-896f-486349e85a3d
+  - Quantité: 1
+  - Prix unitaire: $20.95
+  - Sous-total (produit): $20.95
+  - Livraison choisie: option 2 (3 jour(s), $4.99)
+
+Total estimé des articles du panier (hors livraison & taxes): $42.75
+
+3) HISTORIQUE DES COMMANDES (orders.json)
+------------------------------------------------------------
+- Commande 27cba69d-4c3d-4098-b42d-ac7fa62b7664
+  - Date/heure (UTC): 2024-08-12T10:00:00+00:00
+  - Total payé: $35.06
+  - Articles:
+    * Black and Gray Athletic Cotton Socks - 6 Pairs | productId=e43638ce-6aa0-4b85-b27f-e1d07eb678c6
+      - Quantité: 1
+      - Prix unitaire catalogue: $10.90
+      - Livraison estimée (UTC): 2024-08-15T10:00:00+00:00
+    * Adults Plain Cotton T-Shirt - 2 Pack | productId=83d4ca15-0f35-48f5-b7a3-1ea210004f2e
+      - Quantité: 2
+      - Prix unitaire catalogue: $7.99
+      - Livraison estimée (UTC): 2024-08-12T10:00:00+00:00
+
+- Commande b6b6c212-d30e-4d4a-805d-90b52ce6b37d
+  - Date/heure (UTC): 2024-06-10T10:00:00+00:00
+  - Total payé: $41.90
+  - Articles:
+    * Intermediate Size Basketball | productId=15b6fc6f-327a-4ec4-896f-486349e85a3d
+      - Quantité: 2
+      - Prix unitaire catalogue: $20.95
+      - Livraison estimée (UTC): 2024-06-17T10:00:00+00:00
+
+4) CATALOGUE PRODUITS (products.json)
+------------------------------------------------------------
+Nombre total de produits dans le catalogue: 42
+Prix min: $7.99 | Prix max: $107.47 | Prix moyen: $34.85
+
+4.1) Liste détaillée des produits
+------------------------------------------------------------
+- Black and Gray Athletic Cotton Socks - 6 Pairs (id=e43638ce-6aa0-4b85-b27f-e1d07eb678c6)
+  - Prix: $10.90 (1090 cents)
+  - Image: images/products/athletic-cotton-socks-6-pairs.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 87
+  - Mots-clés: socks, sports, apparel
+- Intermediate Size Basketball (id=15b6fc6f-327a-4ec4-896f-486349e85a3d)
+  - Prix: $20.95 (2095 cents)
+  - Image: images/products/intermediate-composite-basketball.jpg
+  - Note: 4 étoiles | Nombre d'avis: 127
+  - Mots-clés: sports, basketballs
+- Adults Plain Cotton T-Shirt - 2 Pack (id=83d4ca15-0f35-48f5-b7a3-1ea210004f2e)
+  - Prix: $7.99 (799 cents)
+  - Image: images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 56
+  - Mots-clés: tshirts, apparel, mens
+- 2 Slot Toaster - White (id=54e0eccd-8f36-462b-b68a-8182611d9add)
+  - Prix: $18.99 (1899 cents)
+  - Image: images/products/2-slot-toaster-white.jpg
+  - Note: 5 étoiles | Nombre d'avis: 2197
+  - Mots-clés: toaster, kitchen, appliances
+- 2 Piece White Dinner Plate Set (id=3ebe75dc-64d2-4137-8860-1f5a963e534b)
+  - Prix: $20.67 (2067 cents)
+  - Image: images/products/elegant-white-dinner-plate-set.jpg
+  - Note: 4 étoiles | Nombre d'avis: 37
+  - Mots-clés: plates, kitchen, dining
+- 3 Piece Non-Stick, Black Cooking Pot Set (id=8c9c52b5-5a19-4bcb-a5d1-158a74287c53)
+  - Prix: $34.99 (3499 cents)
+  - Image: images/products/3-piece-cooking-set.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 175
+  - Mots-clés: kitchen, cookware
+- Cotton Oversized Sweater - Gray (id=dd82ca78-a18b-4e2a-9250-31e67412f98d)
+  - Prix: $24.00 (2400 cents)
+  - Image: images/products/women-plain-cotton-oversized-sweater-gray.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 317
+  - Mots-clés: sweaters, apparel
+- 2 Piece Luxury Towel Set - White (id=77919bbe-0e56-475b-adde-4f24dfed3a04)
+  - Prix: $35.99 (3599 cents)
+  - Image: images/products/luxury-towel-set.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 144
+  - Mots-clés: bathroom, washroom, restroom, towels, bath towels
+- Ultra Soft Tissue 2-Ply - 8 Boxes (id=6b07d4e7-f540-454e-8a1e-363f25dbae7d)
+  - Prix: $23.74 (2374 cents)
+  - Image: images/products/facial-tissue-2-ply-8-boxes.jpg
+  - Note: 4 étoiles | Nombre d'avis: 99
+  - Mots-clés: kleenex, tissues, kitchen, napkins
+- Women's Striped Beach Dress (id=5968897c-4d27-4872-89f6-5bcb052746d7)
+  - Prix: $29.70 (2970 cents)
+  - Image: images/products/women-striped-beach-dress.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 235
+  - Mots-clés: robe, swimsuit, swimming, bathing, apparel
+- Women's Sandal Heels - Pink (id=b86ddc8b-3501-4b17-9889-a3bad6fb585f)
+  - Prix: $53.00 (5300 cents)
+  - Image: images/products/women-sandal-heels-white-pink.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 2286
+  - Mots-clés: womens, shoes, heels, sandals
+- Round Sunglasses (id=aad29d11-ea98-41ee-9285-b916638cac4a)
+  - Prix: $35.60 (3560 cents)
+  - Image: images/products/round-sunglasses-gold.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 30
+  - Mots-clés: accessories, shades
+- Blackout Curtains Set - Beige (id=901eb2ca-386d-432e-82f0-6fb1ee7bf969)
+  - Prix: $45.99 (4599 cents)
+  - Image: images/products/blackout-curtain-set-beige.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 232
+  - Mots-clés: bedroom, curtains, home
+- Women's Summer Jean Shorts (id=82bb68d7-ebc9-476a-989c-c78a40ee5cd9)
+  - Prix: $16.99 (1699 cents)
+  - Image: images/products/women-summer-jean-shorts.jpg
+  - Note: 4 étoiles | Nombre d'avis: 160
+  - Mots-clés: shorts, apparel, womens
+- Electric Hot Water Kettle - White (id=c2a82c5e-aff4-435f-9975-517cfaba2ece)
+  - Prix: $50.74 (5074 cents)
+  - Image: images/products/electric-steel-hot-water-kettle-white.jpg
+  - Note: 5 étoiles | Nombre d'avis: 846
+  - Mots-clés: water kettle, appliances, kitchen
+- Waterproof Knit Athletic Sneakers - Gray (id=58b4fc92-e98c-42aa-8c55-b6b79996769a)
+  - Prix: $53.90 (5390 cents)
+  - Image: images/products/knit-athletic-sneakers-gray.jpg
+  - Note: 4 étoiles | Nombre d'avis: 89
+  - Mots-clés: shoes, running shoes, footwear
+- Straw Wide Brim Sun Hat (id=a82c6bac-3067-4e68-a5ba-d827ac0be010)
+  - Prix: $22.00 (2200 cents)
+  - Image: images/products/straw-sunhat.jpg
+  - Note: 4 étoiles | Nombre d'avis: 215
+  - Mots-clés: hats, straw hats, summer, apparel
+- Men's Athletic Sneaker - White (id=1c079479-8586-494f-ab53-219325432536)
+  - Prix: $45.90 (4590 cents)
+  - Image: images/products/men-athletic-shoes-white.jpg
+  - Note: 4 étoiles | Nombre d'avis: 229
+  - Mots-clés: shoes, running shoes, footwear, mens
+- Men's Wool Sweater - Black (id=b0f17cc5-8b40-4ca5-9142-b61fe3d98c85)
+  - Prix: $33.74 (3374 cents)
+  - Image: images/products/men-stretch-wool-sweater-black.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 2465
+  - Mots-clés: sweaters, apparel
+- Bathroom Bath Mat 16 x 32 Inch - Grey (id=a93a101d-79ef-4cf3-a6cf-6dbe532a1b4a)
+  - Prix: $18.50 (1850 cents)
+  - Image: images/products/bathroom-mat.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 119
+  - Mots-clés: bathmat, bathroom, home
+- Women's Ballet Flat - White (id=4f4fbcc2-4e72-45cc-935c-9e13d79cc57f)
+  - Prix: $26.40 (2640 cents)
+  - Image: images/products/women-knit-ballet-flat-white.jpg
+  - Note: 4 étoiles | Nombre d'avis: 326
+  - Mots-clés: shoes, flats, womens, footwear
+- Men's Golf Polo Shirt - Gray (id=8b5a2ee1-6055-422a-a666-b34ba28b76d4)
+  - Prix: $15.99 (1599 cents)
+  - Image: images/products/men-golf-polo-t-shirt-gray.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 2556
+  - Mots-clés: tshirts, shirts, apparel, mens
+- Laundry Detergent Tabs, 50 Loads (id=3fdfe8d6-9a15-4979-b459-585b0d0545b9)
+  - Prix: $28.99 (2899 cents)
+  - Image: images/products/laundry-detergent-tabs.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 305
+  - Mots-clés: bathroom, cleaning
+- Sterling Silver Leaf Branch Earrings (id=e4f64a65-1377-42bc-89a5-e572d19252e2)
+  - Prix: $67.99 (6799 cents)
+  - Image: images/products/sky-leaf-branch-earrings.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 52
+  - Mots-clés: jewelry, accessories, womens
+- Duvet Cover Set, Diamond Pattern (id=19c6a64a-5463-4d45-9af8-e41140a4100c)
+  - Prix: $43.99 (4399 cents)
+  - Image: images/products/duvet-cover-set-gray-queen.jpg
+  - Note: 4 étoiles | Nombre d'avis: 456
+  - Mots-clés: bedroom, bed sheets, sheets, covers, home
+- Women's Knit Winter Beanie - Blue (id=d2785924-743d-49b3-8f03-ec258e640503)
+  - Prix: $19.50 (1950 cents)
+  - Image: images/products/women-knit-beanie-pom-pom-blue.jpg
+  - Note: 5 étoiles | Nombre d'avis: 83
+  - Mots-clés: hats, winter hats, beanies, apparel, womens
+- Men's Chino Pants - Beige (id=ee1f7c56-f977-40a4-9642-12ba5072e2b0)
+  - Prix: $22.90 (2290 cents)
+  - Image: images/products/men-chino-pants-beige.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 9017
+  - Mots-clés: pants, apparel, mens
+- Men's Navigator Sunglasses (id=4df68c27-fd59-4a6a-bbd1-e754ddb6d53c)
+  - Prix: $36.90 (3690 cents)
+  - Image: images/products/men-navigator-sunglasses-black.jpg
+  - Note: 3.5 étoiles | Nombre d'avis: 42
+  - Mots-clés: sunglasses, glasses, accessories, shades
+- Men's Brown Flat Sneakers (id=04701903-bc79-49c6-bc11-1af7e3651358)
+  - Prix: $24.99 (2499 cents)
+  - Image: images/products/men-brown-flat-sneakers.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 562
+  - Mots-clés: footwear, men, sneakers
+- Non-Stick Cook Set With Lids - 4 Pieces (id=4e37dd03-3b23-4bc6-9ff8-44e112a92c64)
+  - Prix: $67.97 (6797 cents)
+  - Image: images/products/non-stick-cooking-set-4-pieces.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 511
+  - Mots-clés: cooking set, kitchen
+- Vanity Mirror with LED Lights - Pink (id=a434b69f-1bc1-482d-9ce7-cd7f4a66ce8d)
+  - Prix: $25.49 (2549 cents)
+  - Image: images/products/vanity-mirror-pink.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 130
+  - Mots-clés: bathroom, washroom, mirrors, home
+- Women's Relaxed Lounge Pants - Pink (id=a45cfa0a-66d6-4dc7-9475-e2b01595f7d7)
+  - Prix: $34.00 (3400 cents)
+  - Image: images/products/women-relaxed-lounge-pants-pink.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 248
+  - Mots-clés: pants, apparel, womens
+- Crystal Zirconia Stud Earrings - Pink (id=d339adf3-e004-4c20-a120-40e8874c66cb)
+  - Prix: $34.67 (3467 cents)
+  - Image: images/products/crystal-zirconia-stud-earrings-pink.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 117
+  - Mots-clés: accessories, womens
+- Glass Screw Lid Containers - 3 Pieces (id=d37a651a-d501-483b-aae6-a9659b0757a0)
+  - Prix: $28.99 (2899 cents)
+  - Image: images/products/glass-screw-lid-food-containers.jpg
+  - Note: 4 étoiles | Nombre d'avis: 126
+  - Mots-clés: food containers, kitchen
+- Black and Silver Espresso Maker (id=0d7f9afa-2efe-4fd9-b0fd-ba5663e0a524)
+  - Prix: $82.50 (8250 cents)
+  - Image: images/products/black-and-silver-espresso-maker.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 1211
+  - Mots-clés: espresso makers, kitchen, appliances
+- Blackout Curtains Set 42 x 84-Inch - Teal (id=02e3a47e-dd68-467e-9f71-8bf6f723fdae)
+  - Prix: $30.99 (3099 cents)
+  - Image: images/products/blackout-curtains-set-teal.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 363
+  - Mots-clés: bedroom, home, curtains
+- Bath Towels 2 Pack - Gray, Rosewood (id=8a53b080-6d40-4a65-ab26-b24ecf700bce)
+  - Prix: $29.90 (2990 cents)
+  - Image: images/products/bath-towel-set-gray-rosewood.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 93
+  - Mots-clés: bathroom, home, towels
+- Athletic Skateboard Shoes - Gray (id=10ed8504-57db-433c-b0a3-fc71a35c88a1)
+  - Prix: $33.90 (3390 cents)
+  - Image: images/products/athletic-skateboard-shoes-gray.jpg
+  - Note: 4 étoiles | Nombre d'avis: 89
+  - Mots-clés: shoes, running shoes, footwear
+- Countertop Push Blender - Black (id=77a845b1-16ed-4eac-bdf9-5b591882113d)
+  - Prix: $107.47 (10747 cents)
+  - Image: images/products/countertop-push-blender-black.jpg
+  - Note: 4 étoiles | Nombre d'avis: 3
+  - Mots-clés: food blenders, kitchen, appliances
+- Men's Fleece Hoodie - Light Teal (id=bc2847e9-5323-403f-b7cf-57fde044a955)
+  - Prix: $38.00 (3800 cents)
+  - Image: images/products/men-cozy-fleece-hoodie-light-teal.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 3157
+  - Mots-clés: sweaters, hoodies, apparel, mens
+- Artistic Bowl and Plate Set - 6 Pieces (id=36c64692-677f-4f58-b5ec-0dc2cf109e27)
+  - Prix: $38.99 (3899 cents)
+  - Image: images/products/artistic-bowl-set-6-piece.jpg
+  - Note: 5 étoiles | Nombre d'avis: 679
+  - Mots-clés: bowls set, kitchen
+- 2-Ply Kitchen Paper Towels - 8 Pack (id=aaa65ef3-8d6f-4eb3-bc9b-a6ea49047d8f)
+  - Prix: $18.99 (1899 cents)
+  - Image: images/products/kitchen-paper-towels-8-pack.jpg
+  - Note: 4.5 étoiles | Nombre d'avis: 1045
+  - Mots-clés: kitchen, kitchen towels, tissues
+
+4.2) Index par mots-clés (utile pour la recherche sémantique)
+------------------------------------------------------------
+- accessories: Crystal Zirconia Stud Earrings - Pink, Men's Navigator Sunglasses, Round Sunglasses, Sterling Silver Leaf Branch Earrings
+- apparel: Adults Plain Cotton T-Shirt - 2 Pack, Black and Gray Athletic Cotton Socks - 6 Pairs, Cotton Oversized Sweater - Gray, Men's Chino Pants - Beige, Men's Fleece Hoodie - Light Teal, Men's Golf Polo Shirt - Gray, Men's Wool Sweater - Black, Straw Wide Brim Sun Hat, Women's Knit Winter Beanie - Blue, Women's Relaxed Lounge Pants - Pink, Women's Striped Beach Dress, Women's Summer Jean Shorts
+- appliances: 2 Slot Toaster - White, Black and Silver Espresso Maker, Countertop Push Blender - Black, Electric Hot Water Kettle - White
+- basketballs: Intermediate Size Basketball
+- bath towels: 2 Piece Luxury Towel Set - White
+- bathing: Women's Striped Beach Dress
+- bathmat: Bathroom Bath Mat 16 x 32 Inch - Grey
+- bathroom: 2 Piece Luxury Towel Set - White, Bath Towels 2 Pack - Gray, Rosewood, Bathroom Bath Mat 16 x 32 Inch - Grey, Laundry Detergent Tabs, 50 Loads, Vanity Mirror with LED Lights - Pink
+- beanies: Women's Knit Winter Beanie - Blue
+- bed sheets: Duvet Cover Set, Diamond Pattern
+- bedroom: Blackout Curtains Set - Beige, Blackout Curtains Set 42 x 84-Inch - Teal, Duvet Cover Set, Diamond Pattern
+- bowls set: Artistic Bowl and Plate Set - 6 Pieces
+- cleaning: Laundry Detergent Tabs, 50 Loads
+- cooking set: Non-Stick Cook Set With Lids - 4 Pieces
+- cookware: 3 Piece Non-Stick, Black Cooking Pot Set
+- covers: Duvet Cover Set, Diamond Pattern
+- curtains: Blackout Curtains Set - Beige, Blackout Curtains Set 42 x 84-Inch - Teal
+- dining: 2 Piece White Dinner Plate Set
+- espresso makers: Black and Silver Espresso Maker
+- flats: Women's Ballet Flat - White
+- food blenders: Countertop Push Blender - Black
+- food containers: Glass Screw Lid Containers - 3 Pieces
+- footwear: Athletic Skateboard Shoes - Gray, Men's Athletic Sneaker - White, Men's Brown Flat Sneakers, Waterproof Knit Athletic Sneakers - Gray, Women's Ballet Flat - White
+- glasses: Men's Navigator Sunglasses
+- hats: Straw Wide Brim Sun Hat, Women's Knit Winter Beanie - Blue
+- heels: Women's Sandal Heels - Pink
+- home: Bath Towels 2 Pack - Gray, Rosewood, Bathroom Bath Mat 16 x 32 Inch - Grey, Blackout Curtains Set - Beige, Blackout Curtains Set 42 x 84-Inch - Teal, Duvet Cover Set, Diamond Pattern, Vanity Mirror with LED Lights - Pink
+- hoodies: Men's Fleece Hoodie - Light Teal
+- jewelry: Sterling Silver Leaf Branch Earrings
+- kitchen: 2 Piece White Dinner Plate Set, 2 Slot Toaster - White, 2-Ply Kitchen Paper Towels - 8 Pack, 3 Piece Non-Stick, Black Cooking Pot Set, Artistic Bowl and Plate Set - 6 Pieces, Black and Silver Espresso Maker, Countertop Push Blender - Black, Electric Hot Water Kettle - White, Glass Screw Lid Containers - 3 Pieces, Non-Stick Cook Set With Lids - 4 Pieces, Ultra Soft Tissue 2-Ply - 8 Boxes
+- kitchen towels: 2-Ply Kitchen Paper Towels - 8 Pack
+- kleenex: Ultra Soft Tissue 2-Ply - 8 Boxes
+- men: Men's Brown Flat Sneakers
+- mens: Adults Plain Cotton T-Shirt - 2 Pack, Men's Athletic Sneaker - White, Men's Chino Pants - Beige, Men's Fleece Hoodie - Light Teal, Men's Golf Polo Shirt - Gray
+- mirrors: Vanity Mirror with LED Lights - Pink
+- napkins: Ultra Soft Tissue 2-Ply - 8 Boxes
+- pants: Men's Chino Pants - Beige, Women's Relaxed Lounge Pants - Pink
+- plates: 2 Piece White Dinner Plate Set
+- restroom: 2 Piece Luxury Towel Set - White
+- robe: Women's Striped Beach Dress
+- running shoes: Athletic Skateboard Shoes - Gray, Men's Athletic Sneaker - White, Waterproof Knit Athletic Sneakers - Gray
+- sandals: Women's Sandal Heels - Pink
+- shades: Men's Navigator Sunglasses, Round Sunglasses
+- sheets: Duvet Cover Set, Diamond Pattern
+- shirts: Men's Golf Polo Shirt - Gray
+- shoes: Athletic Skateboard Shoes - Gray, Men's Athletic Sneaker - White, Waterproof Knit Athletic Sneakers - Gray, Women's Ballet Flat - White, Women's Sandal Heels - Pink
+- shorts: Women's Summer Jean Shorts
+- sneakers: Men's Brown Flat Sneakers
+- socks: Black and Gray Athletic Cotton Socks - 6 Pairs
+- sports: Black and Gray Athletic Cotton Socks - 6 Pairs, Intermediate Size Basketball
+- straw hats: Straw Wide Brim Sun Hat
+- summer: Straw Wide Brim Sun Hat
+- sunglasses: Men's Navigator Sunglasses
+- sweaters: Cotton Oversized Sweater - Gray, Men's Fleece Hoodie - Light Teal, Men's Wool Sweater - Black
+- swimming: Women's Striped Beach Dress
+- swimsuit: Women's Striped Beach Dress
+- tissues: 2-Ply Kitchen Paper Towels - 8 Pack, Ultra Soft Tissue 2-Ply - 8 Boxes
+- toaster: 2 Slot Toaster - White
+- towels: 2 Piece Luxury Towel Set - White, Bath Towels 2 Pack - Gray, Rosewood
+- tshirts: Adults Plain Cotton T-Shirt - 2 Pack, Men's Golf Polo Shirt - Gray
+- washroom: 2 Piece Luxury Towel Set - White, Vanity Mirror with LED Lights - Pink
+- water kettle: Electric Hot Water Kettle - White
+- winter hats: Women's Knit Winter Beanie - Blue
+- womens: Crystal Zirconia Stud Earrings - Pink, Sterling Silver Leaf Branch Earrings, Women's Ballet Flat - White, Women's Knit Winter Beanie - Blue, Women's Relaxed Lounge Pants - Pink, Women's Sandal Heels - Pink, Women's Summer Jean Shorts
+
+Questions fréquemment posées:
+Notre site e-commerce permet de commander facilement des produits neufs et 
+authentiques en les ajoutant au panier puis en suivant les étapes de paiement,
+avec ou sans création de compte, et une confirmation de commande est envoyée par
+courriel après validation. Les produits peuvent parfois être en rupture de stock, 
+mais les clients ont la possibilité de s’inscrire pour être informés de leur 
+disponibilité, et des guides détaillés aident à choisir la bonne taille ou le bon 
+modèle. Les paiements sont sécurisés par des protocoles SSL et peuvent être effectués
+par carte de crédit, PayPal ou d’autres moyens selon la région, bien qu’un refus de 
+paiement puisse survenir en cas d’informations incorrectes ou de restrictions 
+bancaires. Les commandes sont généralement livrées sous 3 à 7 jours ouvrables, avec 
+un numéro de suivi envoyé dès l’expédition, et des options de livraison 
+internationale sont proposées selon la destination. Les clients disposent de 14 
+jours après réception pour retourner un produit non utilisé dans son emballage 
+d’origine, et les remboursements sont traités dans un délai de 5 à 10 jours 
+ouvrables après réception du retour. La création d’un compte, bien que facultative, 
+permet de suivre les commandes, de gérer les informations personnelles et de 
+récupérer un mot de passe en cas d’oubli. Le service client est accessible par 
+formulaire, courriel ou chatbot du lundi au vendredi de 9h à 18h, et toutes les 
+données personnelles sont protégées conformément aux lois en vigueur sur la confidentialité.
+FIN DU CONTEXTE
