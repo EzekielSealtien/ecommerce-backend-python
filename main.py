@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from rag import ask_ecommerce_chatbot
 import os
 
+
 class UserInput(BaseModel):
 	question: str
 
