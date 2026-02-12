@@ -21,7 +21,7 @@ app.add_middleware(
 
 @app.get("/")
 def test():
-    return {"message": "E-commerce Chatbot API is running."}
+    return {"message": "E-commerce Chatbot API is running. Thank you Jesus Christ!"}
 
 @app.post("/api/chatbot-response")
 def chatbot_response(req: UserInput):
