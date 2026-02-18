@@ -12,7 +12,7 @@ from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
 load_dotenv()
 
-
+a=1
 loader = TextLoader("informations.txt")
 text_documents = loader.load()
 
